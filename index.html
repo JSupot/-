@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="./css/main.css">
+    <script type="text/javascript" src="./js/emoji.js"></script>
+    <script type="text/javascript" src="./js/jquery.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div contenteditable="true" id="edit"></div>
+      <div id="emojiBar">
+        <img src="./images/emoji.png" alt="" title="插入表情" id="insert"/>
+      </div>
+
+    <script type="text/javascript">
+      var insert = document.getElementById('insert');
+      var editor = document.getElementById('edit');
+
+      //获取富文本的光标位置
+      setTimeout(function() {
+        editor.focus();
+      }, 100);
+
+      Emotion.setEdit('edit');
+
+      insert.onclick = function() {
+        var emojiNum = Math.floor(Math.random() * 104);
+        var image = '<img src="./images/icons/' + emojiNum + '.jpg' + '" alt="" />';
+        Emotion.insertHTML(image);
+      };
+
+
+      //富文本编辑框的focus事件
+      editor.onfocus = function () {
+        var sel,range;
+        if (window.getSelection && document.createRange) {
+          range = document.createRange();
+          range.selectNodeContents(editor);
+          range.collapse(true);
+          range.setEnd(editor, editor.childNodes.length);
+          range.setStart(editor, editor.childNodes.length);
+          sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+        } else if (document.body.createTextRange) {
+          range = document.body.createTextRange();
+          range.moveToElementText(editor);
+          range.collapse(true);
+          range.select();
+        }
+
+        Emotion.saveRange();  //记住光标位置
+      };
+
+      $('#edit').mouseup(function() {
+        Emotion.saveRange();  //记住光标位置
+      });
+
+      $('#edit').keyup(function() {
+        Emotion.saveRange();  //记住光标位置
+      });
+
+      $('#edit').focus(function() {
+        Emotion.saveRange();  //记住光标位置
+      });
+
+
+
+    </script>
+  </body>
+</html>
